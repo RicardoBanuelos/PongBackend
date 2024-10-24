@@ -37,12 +37,12 @@ public class UserService {
     public UserDto register(SignUpDto signUpDto) {
         Optional<User> oUser = userRepository.findByEmail(signUpDto.email());
         if(oUser.isPresent()) {
-            throw new AppException("Email already taken", HttpStatus.BAD_REQUEST);
+            throw new AppException("Email already taken", HttpStatus.CONFLICT);
         }
 
         oUser = userRepository.findByUsername(signUpDto.username());
         if(oUser.isPresent()) {
-            throw new AppException("Username already taken", HttpStatus.BAD_REQUEST);
+            throw new AppException("Username already taken", HttpStatus.CONFLICT);
         }
 
         User user = userMapper.signUp(signUpDto);
@@ -50,5 +50,11 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserDto(savedUser);
+    }
+
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        return userMapper.toUserDto(user);
     }
 }
