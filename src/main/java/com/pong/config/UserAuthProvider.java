@@ -53,19 +53,19 @@ public class UserAuthProvider {
                 .firstname(decoded.getClaim("firstname").asString())
                 .lastname(decoded.getClaim("lastname").asString())
                 .build();
+
         return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
     }
 
     public Authentication validateTokenStrongly(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
-
+        JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByUsername(decoded.getSubject());
+        String issuer = decoded.getIssuer();
+        UserDto userDto = userService.findByUsername(issuer);
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(userDto, null, Collections.emptyList());
     }
 }
