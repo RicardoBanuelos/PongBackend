@@ -8,6 +8,7 @@ import com.pong.repositories.MatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,22 +17,15 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final MatchMapper matchMapper;
 
-    public List<MatchDto> getAllMatches() {
-        List<Match> matches = matchRepository.findAll();
-        List<MatchDto> matchesDto;
-        return null;
-    }
-
-    public List<MatchDto> getAllMatchesById(Long id) {
-        List<Match> matches = matchRepository.findAllByUserId(id);
-        List<MatchDto> matchesDto;
-        return null;
-    }
-
     public List<MatchDto> getAllMatchesByUsername(String username) {
         List<Match> matches =  matchRepository.findAllByUsername(username);
-        List<MatchDto> matchesDto;
-        return null;
+
+        List<MatchDto> matchesDto = new ArrayList<>();
+        for(Match match : matches) {
+            matchesDto.add(matchMapper.toMatchDto(match));
+        }
+
+        return matchesDto;
     }
 
     public MatchDto addMatch(NewMatchDto newMatchDto) {
