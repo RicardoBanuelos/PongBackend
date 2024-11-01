@@ -18,8 +18,14 @@ public class MatchLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name="match", nullable = false)
+    private Match match;
+
     @Column(name="createAt", nullable = false)
     private Date createdAt;
-    @Column(name="player_id", nullable = false)
-    private Long player_id;
+
+    @Column(name="player_username", nullable = false)
+    private String playerUsername;
 }

@@ -31,7 +31,6 @@ public class MatchService {
     public MatchDto addMatch(NewMatchDto newMatchDto) {
         Match newMatch = matchMapper.createMatch(newMatchDto);
         Match savedMatch = matchRepository.save(newMatch);
-
         return matchMapper.toMatchDto(savedMatch);
     }
 }

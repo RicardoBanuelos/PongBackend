@@ -13,11 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-public class MatchDto {
-    Long id;
-    Date date;
-    String usernameOne;
-    String usernameTwo;
-    int playerOneScore;
-    int playerTwoScore;
+public class MatchLogDto {
+    Long matchId;
+    Date createdAt;
+    String playerUsername;
 }

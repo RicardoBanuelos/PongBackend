@@ -2,7 +2,6 @@ package com.pong.controllers;
 
 import com.pong.dtos.MatchDto;
 import com.pong.dtos.NewMatchDto;
-import com.pong.entities.Match;
 import com.pong.services.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
