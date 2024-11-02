@@ -30,6 +30,8 @@ public class MatchLogMapper {
             matchLog.setMatch(match.get());
             matchLog.setCreatedAt(matchLogDto.getCreatedAt());
             matchLog.setPlayerUsername(matchLogDto.getPlayerUsername());
+
+            matchLogs.add(matchLog);
         }
 
         return matchLogs;
