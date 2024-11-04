@@ -6,8 +6,8 @@ import java.util.Date;
 
 public record NewMatchDto (
         Date date,
-        String usernameOne,
-        String usernameTwo,
+        String playerOneUsername,
+        String playerTwoUsername,
         int playerOneScore,
         int playerTwoScore
 ) {}

@@ -23,8 +23,8 @@ public class MatchMapper {
         MatchDto.MatchDtoBuilder matchDto = MatchDto.builder();
         matchDto.id(match.getId());
         matchDto.date(match.getDate());
-        matchDto.usernameOne(match.getUserOne().getUsername());
-        matchDto.usernameTwo(match.getUserTwo().getUsername());
+        matchDto.playerOneUsername(match.getUserOne().getUsername());
+        matchDto.playerTwoUsername(match.getUserTwo().getUsername());
         matchDto.playerOneScore(match.getPlayerOneScore());
         matchDto.playerTwoScore(match.getPlayerTwoScore());
 
@@ -36,10 +36,10 @@ public class MatchMapper {
         if(newMatchDto == null)
             return null;
 
-        User userOne = userRepository.findByUsername(newMatchDto.usernameOne())
+        User userOne = userRepository.findByUsername(newMatchDto.playerOneUsername())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
-        User userTwo = userRepository.findByUsername(newMatchDto.usernameTwo())
+        User userTwo = userRepository.findByUsername(newMatchDto.playerTwoUsername())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
         Match match = new Match();

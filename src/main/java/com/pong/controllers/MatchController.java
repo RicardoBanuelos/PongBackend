@@ -15,10 +15,13 @@ import java.util.List;
 public class MatchController {
     private final MatchService matchService;
 
-    @GetMapping("/matches/{username}")
-    public ResponseEntity<List<MatchDto>> getMatchesByUsername(@PathVariable String username) {
-        List<MatchDto> matches = matchService.getAllMatchesByUsername(username);
-        return ResponseEntity.ok(matches);
+    @GetMapping("/matches")
+    public ResponseEntity<List<MatchDto>> getMatchesByUsername(
+            @RequestParam String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        List<MatchDto> matchesDto = matchService.getAllMatchesByUsername(username, page, size);
+        return ResponseEntity.ok(matchesDto);
     }
 
     @PostMapping("/add_match")
