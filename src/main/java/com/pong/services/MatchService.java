@@ -21,11 +21,13 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final MatchMapper matchMapper;
 
-    public List<MatchDto> getAllMatchesByUsername(String username, int page, int size) {
+    public Page<MatchDto> getAllMatchesByUsername(String username, int page, int size) {
         Page<Match> matchesPage = matchRepository.findAllByUsername(username, PageRequest.of(page, size));
-        return matchesPage.getContent().stream()
-                .map(matchMapper::toMatchDto)
-                .collect(Collectors.toList());
+        return matchesPage.map(matchMapper::toMatchDto);
+    }
+
+    public List<Match> getAllMatchesByUsername(String username) {
+        return matchRepository.findAllByUsername(username);
     }
 
     public MatchDto addMatch(NewMatchDto newMatchDto) {
