@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity
-@Table(name="app_user")
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class User {
     @Column(name="email", nullable = false, unique = true)
     private String email;
 
-    @Column(name="firstname", nullable = false)
+    @Column(name="first_name", nullable = false)
     private String firstname;
 
-    @Column(name="lastname", nullable = false)
+    @Column(name="last_name", nullable = false)
     private String lastname;
 
     @Column(name="username", nullable = false, unique = true)

@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 @Data
 @Entity
-@Table(name="match")
+@Table(name="matches")
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,16 +23,16 @@ public class Match {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name="user_one", nullable = false)
+    @JoinColumn(name="user_one_id", nullable = false)
     private User userOne;
 
     @ManyToOne
-    @JoinColumn(name="user_two", nullable = false)
+    @JoinColumn(name="user_two_id", nullable = false)
     private User userTwo;
 
-    @Column(name="player_one_score", nullable = false)
+    @Column(name="user_one_score", nullable = false)
     private int playerOneScore;
 
-    @Column(name="player_two_score", nullable = false)
+    @Column(name="user_two_score", nullable = false)
     private int playerTwoScore;
 }

@@ -13,19 +13,20 @@ import java.util.Date;
 @Builder
 @Data
 @Entity
-@Table(name="match_log")
+@Table(name="match_logs")
 public class MatchLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="match", nullable = false)
+    @JoinColumn(name="match_id", nullable = false)
     private Match match;
 
-    @Column(name="createAt", nullable = false)
-    private Date createdAt;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
 
-    @Column(name="player_username", nullable = false)
-    private String playerUsername;
+    @Column(name="created_at", nullable = false)
+    private Date createdAt;
 }

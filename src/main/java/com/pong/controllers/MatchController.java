@@ -6,15 +6,12 @@ import com.pong.entities.Match;
 import com.pong.services.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.ref.ReferenceQueue;
 import java.net.URI;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,43 +19,37 @@ public class MatchController {
     private final MatchService matchService;
 
     @GetMapping("/matches")
-    public ResponseEntity<Page<MatchDto>> getMatchesByUsername(
-            @RequestParam String username,
+    public ResponseEntity<List<MatchDto>> getMatches(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size) {
-        Page<MatchDto> matchesDto = matchService.getAllMatchesByUsername(username, page, size);
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<MatchDto> matchesDto = matchService.getMatches(page, size);
         return ResponseEntity.ok(matchesDto);
     }
 
-    @GetMapping("/matches/record")
-    public ResponseEntity<List<Integer>> getRecordByUsername(
-            @RequestParam String username
-    ) {
-        List<Match> matches = matchService.getAllMatchesByUsername(username);
-        int wins = 0;
-        int losses = 0;
-
-        for(Match match: matches) {
-            boolean playerOneWon = match.getPlayerOneScore() > match.getPlayerTwoScore();
-            if(playerOneWon) {
-                wins += Objects.equals(username, match.getUserOne().getUsername()) ? 1 :0;
-                losses += Objects.equals(username, match.getUserTwo().getUsername()) ? 1 :0;
-            }
-            else {
-                wins += Objects.equals(username, match.getUserTwo().getUsername()) ? 1 :0;
-                losses += Objects.equals(username, match.getUserOne().getUsername()) ? 1 :0;
-            }
-        }
-
-        List<Integer> record = new ArrayList<>();
-        record.add(wins);
-        record.add(losses);
-        return ResponseEntity.ok(record);
-    }
-
-    @PostMapping("/add_match")
+    @PostMapping("/matches")
     public ResponseEntity<MatchDto> addMatch(@RequestBody NewMatchDto newMatchDto) {
         MatchDto matchDto = matchService.addMatch(newMatchDto);
         return ResponseEntity.created(URI.create("/matches/" + matchDto.getId())).body(matchDto);
+    }
+
+    @GetMapping("/matches/{id}")
+    public ResponseEntity<Page<MatchDto>> getMatchesById(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        Page<MatchDto> matchesDto = matchService.getMatchesById(id, page, size);
+        return ResponseEntity.ok(matchesDto);
+    }
+
+    @GetMapping("/matches/username/{username}")
+    public ResponseEntity<Page<MatchDto>> getMatchesByUsername(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        Page<MatchDto> matchesDto = matchService.getMatchesByUsername(username, page, size);
+        return ResponseEntity.ok(matchesDto);
     }
 }
