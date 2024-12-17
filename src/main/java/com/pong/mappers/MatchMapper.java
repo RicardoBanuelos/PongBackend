@@ -19,8 +19,8 @@ public class MatchMapper {
         matchDto.date(match.getDate());
         matchDto.playerOneUsername(match.getUserOne().getUsername());
         matchDto.playerTwoUsername(match.getUserTwo().getUsername());
-        matchDto.playerOneScore(match.getPlayerOneScore());
-        matchDto.playerTwoScore(match.getPlayerTwoScore());
+        matchDto.playerOneScore(match.getUserOneScore());
+        matchDto.playerTwoScore(match.getUserTwoScore());
 
         return matchDto.build();
     }
@@ -34,8 +34,8 @@ public class MatchMapper {
         match.setDate(newMatchDto.date());
         match.setUserOne(userOne);
         match.setUserTwo(userTwo);
-        match.setPlayerOneScore(newMatchDto.userOneScore());
-        match.setPlayerTwoScore(newMatchDto.userTwoScore());
+        match.setUserOneScore(newMatchDto.userOneScore());
+        match.setUserTwoScore(newMatchDto.userTwoScore());
 
         return match;
     }

@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class MatchLogDto {
+    @JsonProperty("match_id")
     Long matchId;
     @JsonProperty("created_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

@@ -31,8 +31,8 @@ public class Match {
     private User userTwo;
 
     @Column(name="user_one_score", nullable = false)
-    private int playerOneScore;
+    private int userOneScore;
 
     @Column(name="user_two_score", nullable = false)
-    private int playerTwoScore;
+    private int userTwoScore;
 }
