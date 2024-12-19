@@ -6,12 +6,16 @@ import com.pong.dtos.SignUpDto;
 import com.pong.dtos.UserDto;
 import com.pong.exceptions.AppException;
 import com.pong.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +24,9 @@ public class UserController {
     private final UserAuthProvider userAuthProvider;
 
     @PostMapping("/user/login")
-    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto cd) {
+    public ResponseEntity<UserDto> login(
+            @Valid @RequestBody CredentialsDto cd
+    ) {
         UserDto user = userService.login(cd);
         user.setToken(userAuthProvider.createToken(user));
 
@@ -28,7 +34,9 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<UserDto> register(
+            @Valid @RequestBody SignUpDto signUpDto
+    ) {
         UserDto userDto = userService.register(signUpDto);
         userDto.setToken(userAuthProvider.createToken(userDto));
 
@@ -49,5 +57,20 @@ public class UserController {
     ) {
         UserDto userDto = userService.findById(id);
         return ResponseEntity.ok(userDto);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException exp
+    ) {
+        HashMap<String, String> errors = new HashMap<>();
+        exp.getBindingResult().getAllErrors().forEach(error -> {
+            var fieldName = ((FieldError)error).getField();
+            var errorMessage = error.getDefaultMessage();
+
+            errors.put(fieldName, errorMessage);
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

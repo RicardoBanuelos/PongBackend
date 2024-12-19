@@ -2,11 +2,16 @@ package com.pong.controllers;
 
 import com.pong.dtos.MatchLogDto;
 import com.pong.services.MatchLogService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -24,7 +29,9 @@ public class MatchLogController {
     }
 
     @PostMapping("/matches/logs")
-    public ResponseEntity<String> addMatchLogs(@RequestBody List<MatchLogDto> matchLogsDto) {
+    public ResponseEntity<String> addMatchLogs(
+            @Valid @RequestBody List<MatchLogDto> matchLogsDto
+    ) {
         matchLogService.addMatchLogs(matchLogsDto);
         return ResponseEntity.ok("Match Logs Added Successfully");
     }
@@ -34,5 +41,20 @@ public class MatchLogController {
             @PathVariable Long matchId
     ) {
         return ResponseEntity.ok(matchLogService.getAllByMatchId(matchId));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException exp
+    ) {
+        HashMap<String, String> errors = new HashMap<>();
+        exp.getBindingResult().getAllErrors().forEach(error -> {
+            var fieldName = ((FieldError)error).getField();
+            var errorMessage = error.getDefaultMessage();
+
+            errors.put(fieldName, errorMessage);
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

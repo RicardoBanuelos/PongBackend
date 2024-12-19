@@ -1,3 +1,11 @@
 package com.pong.dtos;
 
-public record CredentialsDto (String username, char[] password) { }
+import jakarta.validation.constraints.NotEmpty;
+
+public record CredentialsDto (
+        @NotEmpty
+        String username,
+        @NotEmpty
+        char[] password
+) {
+}
